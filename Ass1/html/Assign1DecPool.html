@@ -1,0 +1,623 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assign1DecPool</title><meta name="generator" content="MATLAB 7.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-02-12"><meta name="DC.source" content="Assign1DecPool.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%Author: P. Harsha Vardhan (11010281)</span>
+<span class="comment">%This file has Decision Statistics of Question 1(a)&amp;(b).(ii) and 1(a)&amp;(b).iv</span>
+</pre><pre class="codeinput"><span class="comment">%Question 1(a).(ii): Decision Calculation</span>
+<span class="comment">%-------------------Decision Statistics without zeroing Non diagonal elements of Pooled Covariance-----------------</span>
+display(<span class="string">'Question 1(a).(ii): Decision Statistics without Zeroing Non-Diagonal Elements of Pooled Covariance Matrix'</span>);
+Pool_E_Counter_e=0;
+Pool_E_Counter_c=0;
+Pool_E_Counter_i=0;
+Pool_E_Array=zeros(1,100);
+
+Pool_C_Counter_e=0;
+Pool_C_Counter_c=0;
+Pool_C_Counter_i=0;
+Pool_C_Array=zeros(1,100);
+
+Pool_I_Counter_e=0;
+Pool_I_Counter_c=0;
+Pool_I_Counter_i=0;
+Pool_I_Array=zeros(1,100);
+
+dirName=<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1'</span>;
+imageFiles=dir(fullfile(dirName,<span class="string">'*.jpg'</span>));
+numel(imageFiles)
+<span class="keyword">for</span> i=1:numel(imageFiles)
+    imgTest=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1\'</span>,imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool)));
+    A=[G_E G_C G_I];
+    <span class="keyword">if</span> max(A)==G_E
+        Pool_E_Counter_e=Pool_E_Counter_e+1;
+        Pool_E_Array(i)=1;
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_C
+        Pool_E_Counter_c=Pool_E_Counter_c+1;
+        Pool_E_Array(i)=2;
+        display([<span class="string">'Que 1(b).(ii) E Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is E but detected as C'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_I
+        Pool_E_Counter_i=Pool_E_Counter_i+1;
+        Pool_E_Array(i)=3;
+        display([<span class="string">'Que 1(b).(ii) E Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is E but detected as I'</span>]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+display(<span class="string">' '</span>);
+<span class="keyword">for</span> i=1:numel(imageFiles)
+    imgTest=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\2\'</span>,imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool)));
+    A=[G_E G_C G_I];
+    <span class="keyword">if</span> max(A)==G_E
+        Pool_C_Counter_e=Pool_C_Counter_e+1;
+        Pool_C_Array(i)=1;
+        display([<span class="string">'Que 1(b).(ii) C Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is C but detected as E'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_C
+        Pool_C_Counter_c=Pool_C_Counter_c+1;
+        Pool_C_Array(i)=2;
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_I
+        Pool_C_Counter_i=Pool_C_Counter_i+1;
+        Pool_C_Array(i)=3;
+        display([<span class="string">'Que 1(b).(ii) C Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is C but detected as I'</span>]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+display(<span class="string">' '</span>);
+<span class="keyword">for</span> i=1:numel(imageFiles)
+    imgTest=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\3\'</span>,imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool)));
+    A=[G_E G_C G_I];
+    <span class="keyword">if</span> max(A)==G_E
+        Pool_I_Counter_e=Pool_I_Counter_e+1;
+        Pool_I_Array(i)=1;
+        display([<span class="string">'Que 1(b).(ii) I Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is I but detected as E'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_C
+        Pool_I_Counter_c=Pool_I_Counter_c+1;
+        Pool_I_Array(i)=2;
+        display([<span class="string">'Que 1(b).(ii) I Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is I but detected as C'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_I
+        Pool_I_Counter_i=Pool_I_Counter_i+1;
+        Pool_I_Array(i)=3;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(i) E Test Characters: '</span> num2str(Pool_E_Counter_e) <span class="string">' image files are detected as E'</span>]);
+display([<span class="string">'Que 1(a).(i) E Test Characters: '</span> num2str(Pool_E_Counter_c) <span class="string">' image files are detected as C'</span>]);
+display([<span class="string">'Que 1(a).(i) E Test Characters: '</span> num2str(Pool_E_Counter_i) <span class="string">' image files are detected as I'</span>]);
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(i) C Test Characters: '</span> num2str(Pool_C_Counter_e) <span class="string">' image files are detected as E'</span>]);
+display([<span class="string">'Que 1(a).(i) C Test Characters: '</span> num2str(Pool_C_Counter_c) <span class="string">' image files are detected as C'</span>]);
+display([<span class="string">'Que 1(a).(i) C Test Characters: '</span> num2str(Pool_C_Counter_i) <span class="string">' image files are detected as I'</span>]);
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(i) I Test Characters: '</span> num2str(Pool_I_Counter_e) <span class="string">' image files are detected as E'</span>]);
+display([<span class="string">'Que 1(a).(i) I Test Characters: '</span> num2str(Pool_I_Counter_c) <span class="string">' image files are detected as C'</span>]);
+display([<span class="string">'Que 1(a).(i) I Test Characters: '</span> num2str(Pool_I_Counter_i) <span class="string">' image files are detected as I'</span>]);
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(i) Accuracy of E test characters: '</span> num2str(Pool_E_Counter_e) <span class="string">'%'</span>]);
+display([<span class="string">'Que 1(a).(i) Accuracy of C test characters: '</span> num2str(Pool_C_Counter_c) <span class="string">'%'</span>]);
+display([<span class="string">'Que 1(a).(i) Accuracy of I test characters: '</span> num2str(Pool_I_Counter_i) <span class="string">'%'</span>]);
+display([<span class="string">'Que 1(a).(i) Average accuracy of all test characters: '</span> num2str((Pool_E_Counter_e+Pool_C_Counter_c+Pool_I_Counter_i)/3) <span class="string">'%'</span>]);
+display(<span class="string">' '</span>);
+</pre><pre class="codeoutput">Question 1(a).(ii): Decision Statistics without Zeroing Non-Diagonal Elements of Pooled Covariance Matrix
+
+ans =
+
+   100
+
+Que 1(b).(ii) E Test Characters:Image File Number 215 is E but detected as C
+Que 1(b).(ii) E Test Characters:Image File Number 218 is E but detected as C
+Que 1(b).(ii) E Test Characters:Image File Number 222 is E but detected as C
+Que 1(b).(ii) E Test Characters:Image File Number 236 is E but detected as I
+Que 1(b).(ii) E Test Characters:Image File Number 245 is E but detected as C
+Que 1(b).(ii) E Test Characters:Image File Number 254 is E but detected as C
+Que 1(b).(ii) E Test Characters:Image File Number 257 is E but detected as C
+Que 1(b).(ii) E Test Characters:Image File Number 264 is E but detected as C
+ 
+Que 1(b).(ii) C Test Characters:Image File Number 225 is C but detected as I
+Que 1(b).(ii) C Test Characters:Image File Number 233 is C but detected as I
+Que 1(b).(ii) C Test Characters:Image File Number 245 is C but detected as E
+Que 1(b).(ii) C Test Characters:Image File Number 247 is C but detected as I
+Que 1(b).(ii) C Test Characters:Image File Number 279 is C but detected as E
+Que 1(b).(ii) C Test Characters:Image File Number 281 is C but detected as I
+Que 1(b).(ii) C Test Characters:Image File Number 292 is C but detected as E
+ 
+Que 1(b).(ii) I Test Characters:Image File Number 209 is I but detected as C
+Que 1(b).(ii) I Test Characters:Image File Number 213 is I but detected as C
+Que 1(b).(ii) I Test Characters:Image File Number 239 is I but detected as C
+Que 1(b).(ii) I Test Characters:Image File Number 244 is I but detected as C
+Que 1(b).(ii) I Test Characters:Image File Number 245 is I but detected as C
+Que 1(b).(ii) I Test Characters:Image File Number 246 is I but detected as C
+Que 1(b).(ii) I Test Characters:Image File Number 247 is I but detected as C
+ 
+Que 1(a).(i) E Test Characters: 92 image files are detected as E
+Que 1(a).(i) E Test Characters: 7 image files are detected as C
+Que 1(a).(i) E Test Characters: 1 image files are detected as I
+ 
+Que 1(a).(i) C Test Characters: 3 image files are detected as E
+Que 1(a).(i) C Test Characters: 93 image files are detected as C
+Que 1(a).(i) C Test Characters: 4 image files are detected as I
+ 
+Que 1(a).(i) I Test Characters: 0 image files are detected as E
+Que 1(a).(i) I Test Characters: 7 image files are detected as C
+Que 1(a).(i) I Test Characters: 93 image files are detected as I
+ 
+Que 1(a).(i) Accuracy of E test characters: 92%
+Que 1(a).(i) Accuracy of C test characters: 93%
+Que 1(a).(i) Accuracy of I test characters: 93%
+Que 1(a).(i) Average accuracy of all test characters: 92.6667%
+ 
+</pre><pre class="codeinput"><span class="comment">%Question 1(a).(iv): Decision Calculation</span>
+<span class="comment">%-------Decision Statistics with Zeroing Non-Diagonal Elements of Pooled Covariance-----------------</span>
+<span class="comment">%---NDZ stands for Non-Diagonal elements set to Zero--------</span>
+display(<span class="string">'Question 1(a).(iv): Decision Statistics with Zeroing Non-Diagonal Elements of Pooled Covariance Matrix'</span>);
+NDZ_Pool_E_Counter_e=0;
+NDZ_Pool_E_Counter_c=0;
+NDZ_Pool_E_Counter_i=0;
+NDZ_Pool_E_Array=zeros(1,100);
+
+NDZ_Pool_C_Counter_e=0;
+NDZ_Pool_C_Counter_c=0;
+NDZ_Pool_C_Counter_i=0;
+NDZ_Pool_C_Array=zeros(1,100);
+
+NDZ_Pool_I_Counter_e=0;
+NDZ_Pool_I_Counter_c=0;
+NDZ_Pool_I_Counter_i=0;
+NDZ_Pool_I_Array=zeros(1,100);
+
+dirName=<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1'</span>;
+imageFiles=dir(fullfile(dirName,<span class="string">'*.jpg'</span>));
+numel(imageFiles)
+<span class="keyword">for</span> i=1:numel(imageFiles)
+    imgTest=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1\'</span>,imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+
+    A=[G_E G_C G_I];
+    <span class="keyword">if</span> max(A)==G_E
+        NDZ_Pool_E_Counter_e=NDZ_Pool_E_Counter_e+1;
+        NDZ_Pool_E_Array(i)=1;
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_C
+        NDZ_Pool_E_Counter_c=NDZ_Pool_E_Counter_c+1;
+        NDZ_Pool_E_Array(i)=2;
+        display([<span class="string">'Que 1(b).(iv) E Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is E but detected as C'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_I
+        NDZ_Pool_E_Counter_i=NDZ_Pool_E_Counter_i+1;
+        NDZ_Pool_E_Array(i)=3;
+        display([<span class="string">'Que 1(b).(iii) E Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is E but detected as I'</span>]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+display(<span class="string">' '</span>);
+<span class="keyword">for</span> i=1:numel(imageFiles)
+    imgTest=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\2\'</span>,imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    A=[G_E G_C G_I];
+    <span class="keyword">if</span> max(A)==G_E
+        NDZ_Pool_C_Counter_e=NDZ_Pool_C_Counter_e+1;
+        NDZ_Pool_C_Array(i)=1;
+        display([<span class="string">'Que 1(b).(iv) C Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is C but detected as E'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_C
+        NDZ_Pool_C_Counter_c=NDZ_Pool_C_Counter_c+1;
+        NDZ_Pool_C_Array(i)=2;
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_I
+        NDZ_Pool_C_Counter_i=NDZ_Pool_C_Counter_i+1;
+        NDZ_Pool_C_Array(i)=3;
+        display([<span class="string">'Que 1(b).(iv) C Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is C but detected as I'</span>]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">for</span> i=1:numel(imageFiles)
+    imgTest=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\3\'</span>,imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    A=[G_E G_C G_I];
+    <span class="keyword">if</span> max(A)==G_E
+        NDZ_Pool_I_Counter_e=NDZ_Pool_I_Counter_e+1;
+        NDZ_Pool_I_Array(i)=1;
+        display([<span class="string">'Que 1(b).(iv) I Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is I but detected as E'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_C
+        NDZ_Pool_I_Counter_c=NDZ_Pool_I_Counter_c+1;
+        NDZ_Pool_I_Array(i)=2;
+        display([<span class="string">'Que 1(b).(iv) I Test Characters:Image File Number '</span> num2str(i+200) <span class="string">' is I but detected as C'</span>]);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> max(A)==G_I
+        NDZ_Pool_I_Counter_i=NDZ_Pool_I_Counter_i+1;
+        NDZ_Pool_I_Array(i)=3;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(iii) E Test Characters: '</span> num2str(NDZ_Pool_E_Counter_e) <span class="string">' image files are detected as E'</span>]);
+display([<span class="string">'Que 1(a).(iii) E Test Characters: '</span> num2str(NDZ_Pool_E_Counter_c) <span class="string">' image files are detected as C'</span>]);
+display([<span class="string">'Que 1(a).(iii) E Test Characters: '</span> num2str(NDZ_Pool_E_Counter_i) <span class="string">' image files are detected as I'</span>]);
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(iii) C Test Characters: '</span> num2str(NDZ_Pool_C_Counter_e) <span class="string">' image files are detected as E'</span>]);
+display([<span class="string">'Que 1(a).(iii) C Test Characters: '</span> num2str(NDZ_Pool_C_Counter_c) <span class="string">' image files are detected as C'</span>]);
+display([<span class="string">'Que 1(a).(iii) C Test Characters: '</span> num2str(NDZ_Pool_C_Counter_i) <span class="string">' image files are detected as I'</span>]);
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(iii) I Test Characters: '</span> num2str(NDZ_Pool_I_Counter_e) <span class="string">' image files are detected as E'</span>]);
+display([<span class="string">'Que 1(a).(iii) I Test Characters: '</span> num2str(NDZ_Pool_I_Counter_c) <span class="string">' image files are detected as C'</span>]);
+display([<span class="string">'Que 1(a).(iii) I Test Characters: '</span> num2str(NDZ_Pool_I_Counter_i) <span class="string">' image files are detected as I'</span>]);
+display(<span class="string">' '</span>);
+display([<span class="string">'Que 1(a).(iii) Accuracy of E test characters: '</span> num2str(NDZ_Pool_E_Counter_e) <span class="string">'%'</span>]);
+display([<span class="string">'Que 1(a).(iii) Accuracy of C test characters: '</span> num2str(NDZ_Pool_C_Counter_c) <span class="string">'%'</span>]);
+display([<span class="string">'Que 1(a).(iii) Accuracy of I test characters: '</span> num2str(NDZ_Pool_I_Counter_i) <span class="string">'%'</span>]);
+display([<span class="string">'Que 1(a).(iii) Average accuracy of all test characters: '</span> num2str((NDZ_Pool_E_Counter_e+NDZ_Pool_C_Counter_c+NDZ_Pool_I_Counter_i)/3) <span class="string">'%'</span>]);
+display(<span class="string">' '</span>);
+</pre><pre class="codeoutput">Question 1(a).(iv): Decision Statistics with Zeroing Non-Diagonal Elements of Pooled Covariance Matrix
+
+ans =
+
+   100
+
+Que 1(b).(iv) E Test Characters:Image File Number 215 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 216 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 218 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 219 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 220 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 222 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 223 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 228 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 229 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 230 is E but detected as C
+Que 1(b).(iii) E Test Characters:Image File Number 236 is E but detected as I
+Que 1(b).(iv) E Test Characters:Image File Number 245 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 247 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 252 is E but detected as C
+Que 1(b).(iv) E Test Characters:Image File Number 254 is E but detected as C
+Que 1(b).(iii) E Test Characters:Image File Number 255 is E but detected as I
+Que 1(b).(iii) E Test Characters:Image File Number 257 is E but detected as I
+ 
+Que 1(b).(iv) C Test Characters:Image File Number 212 is C but detected as I
+Que 1(b).(iv) C Test Characters:Image File Number 221 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 223 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 234 is C but detected as I
+Que 1(b).(iv) C Test Characters:Image File Number 238 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 242 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 245 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 250 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 256 is C but detected as I
+Que 1(b).(iv) C Test Characters:Image File Number 273 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 274 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 283 is C but detected as I
+Que 1(b).(iv) C Test Characters:Image File Number 295 is C but detected as E
+Que 1(b).(iv) C Test Characters:Image File Number 299 is C but detected as E
+Que 1(b).(iv) I Test Characters:Image File Number 226 is I but detected as E
+ 
+Que 1(a).(iii) E Test Characters: 83 image files are detected as E
+Que 1(a).(iii) E Test Characters: 14 image files are detected as C
+Que 1(a).(iii) E Test Characters: 3 image files are detected as I
+ 
+Que 1(a).(iii) C Test Characters: 10 image files are detected as E
+Que 1(a).(iii) C Test Characters: 86 image files are detected as C
+Que 1(a).(iii) C Test Characters: 4 image files are detected as I
+ 
+Que 1(a).(iii) I Test Characters: 1 image files are detected as E
+Que 1(a).(iii) I Test Characters: 0 image files are detected as C
+Que 1(a).(iii) I Test Characters: 99 image files are detected as I
+ 
+Que 1(a).(iii) Accuracy of E test characters: 83%
+Que 1(a).(iii) Accuracy of C test characters: 86%
+Que 1(a).(iii) Accuracy of I test characters: 99%
+Que 1(a).(iii) Average accuracy of all test characters: 89.3333%
+ 
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.12<br></p></div><!--
+##### SOURCE BEGIN #####
+%Author: P. Harsha Vardhan (11010281)
+%This file has Decision Statistics of Question 1(a)&(b).(ii) and 1(a)&(b).iv
+%%
+%Question 1(a).(ii): Decision Calculation
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Decision Statistics without zeroing Non diagonal elements of Pooled CovarianceREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+display('Question 1(a).(ii): Decision Statistics without Zeroing Non-Diagonal Elements of Pooled Covariance Matrix');
+Pool_E_Counter_e=0;
+Pool_E_Counter_c=0;
+Pool_E_Counter_i=0;
+Pool_E_Array=zeros(1,100); 
+
+Pool_C_Counter_e=0;
+Pool_C_Counter_c=0;
+Pool_C_Counter_i=0;
+Pool_C_Array=zeros(1,100); 
+
+Pool_I_Counter_e=0;
+Pool_I_Counter_c=0;
+Pool_I_Counter_i=0;
+Pool_I_Array=zeros(1,100); 
+
+dirName='D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1';
+imageFiles=dir(fullfile(dirName,'*.jpg'));
+numel(imageFiles)
+for i=1:numel(imageFiles)
+    imgTest=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1\',imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool)));
+    A=[G_E G_C G_I];
+    if max(A)==G_E
+        Pool_E_Counter_e=Pool_E_Counter_e+1;
+        Pool_E_Array(i)=1;
+    end
+    if max(A)==G_C
+        Pool_E_Counter_c=Pool_E_Counter_c+1;
+        Pool_E_Array(i)=2;
+        display(['Que 1(b).(ii) E Test Characters:Image File Number ' num2str(i+200) ' is E but detected as C']);
+    end
+    if max(A)==G_I
+        Pool_E_Counter_i=Pool_E_Counter_i+1;
+        Pool_E_Array(i)=3;
+        display(['Que 1(b).(ii) E Test Characters:Image File Number ' num2str(i+200) ' is E but detected as I']);
+    end
+end
+display(' ');
+for i=1:numel(imageFiles)
+    imgTest=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\2\',imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool)));
+    A=[G_E G_C G_I];
+    if max(A)==G_E
+        Pool_C_Counter_e=Pool_C_Counter_e+1;
+        Pool_C_Array(i)=1;
+        display(['Que 1(b).(ii) C Test Characters:Image File Number ' num2str(i+200) ' is C but detected as E']);
+    end
+    if max(A)==G_C
+        Pool_C_Counter_c=Pool_C_Counter_c+1;
+        Pool_C_Array(i)=2;
+    end
+    if max(A)==G_I
+        Pool_C_Counter_i=Pool_C_Counter_i+1;
+        Pool_C_Array(i)=3;
+        display(['Que 1(b).(ii) C Test Characters:Image File Number ' num2str(i+200) ' is C but detected as I']);
+    end
+end
+display(' ');
+for i=1:numel(imageFiles)
+    imgTest=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\3\',imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool)));
+    A=[G_E G_C G_I];
+    if max(A)==G_E
+        Pool_I_Counter_e=Pool_I_Counter_e+1;
+        Pool_I_Array(i)=1;
+        display(['Que 1(b).(ii) I Test Characters:Image File Number ' num2str(i+200) ' is I but detected as E']);
+    end
+    if max(A)==G_C
+        Pool_I_Counter_c=Pool_I_Counter_c+1;
+        Pool_I_Array(i)=2;
+        display(['Que 1(b).(ii) I Test Characters:Image File Number ' num2str(i+200) ' is I but detected as C']);
+    end
+    if max(A)==G_I
+        Pool_I_Counter_i=Pool_I_Counter_i+1;
+        Pool_I_Array(i)=3;
+    end
+end
+display(' ');
+display(['Que 1(a).(i) E Test Characters: ' num2str(Pool_E_Counter_e) ' image files are detected as E']);
+display(['Que 1(a).(i) E Test Characters: ' num2str(Pool_E_Counter_c) ' image files are detected as C']);
+display(['Que 1(a).(i) E Test Characters: ' num2str(Pool_E_Counter_i) ' image files are detected as I']);
+display(' ');
+display(['Que 1(a).(i) C Test Characters: ' num2str(Pool_C_Counter_e) ' image files are detected as E']);
+display(['Que 1(a).(i) C Test Characters: ' num2str(Pool_C_Counter_c) ' image files are detected as C']);
+display(['Que 1(a).(i) C Test Characters: ' num2str(Pool_C_Counter_i) ' image files are detected as I']);
+display(' ');
+display(['Que 1(a).(i) I Test Characters: ' num2str(Pool_I_Counter_e) ' image files are detected as E']);
+display(['Que 1(a).(i) I Test Characters: ' num2str(Pool_I_Counter_c) ' image files are detected as C']);
+display(['Que 1(a).(i) I Test Characters: ' num2str(Pool_I_Counter_i) ' image files are detected as I']);
+display(' ');
+display(['Que 1(a).(i) Accuracy of E test characters: ' num2str(Pool_E_Counter_e) '%']);
+display(['Que 1(a).(i) Accuracy of C test characters: ' num2str(Pool_C_Counter_c) '%']);
+display(['Que 1(a).(i) Accuracy of I test characters: ' num2str(Pool_I_Counter_i) '%']);
+display(['Que 1(a).(i) Average accuracy of all test characters: ' num2str((Pool_E_Counter_e+Pool_C_Counter_c+Pool_I_Counter_i)/3) '%']);
+display(' ');
+
+%%
+%Question 1(a).(iv): Decision Calculation
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Decision Statistics with Zeroing Non-Diagonal Elements of Pooled CovarianceREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%REPLACE_WITH_DASH_DASH-NDZ stands for Non-Diagonal elements set to ZeroREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+display('Question 1(a).(iv): Decision Statistics with Zeroing Non-Diagonal Elements of Pooled Covariance Matrix');
+NDZ_Pool_E_Counter_e=0;
+NDZ_Pool_E_Counter_c=0;
+NDZ_Pool_E_Counter_i=0;
+NDZ_Pool_E_Array=zeros(1,100); 
+
+NDZ_Pool_C_Counter_e=0;
+NDZ_Pool_C_Counter_c=0;
+NDZ_Pool_C_Counter_i=0;
+NDZ_Pool_C_Array=zeros(1,100); 
+
+NDZ_Pool_I_Counter_e=0;
+NDZ_Pool_I_Counter_c=0;
+NDZ_Pool_I_Counter_i=0;
+NDZ_Pool_I_Array=zeros(1,100); 
+
+dirName='D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1';
+imageFiles=dir(fullfile(dirName,'*.jpg'));
+numel(imageFiles)
+for i=1:numel(imageFiles)
+    imgTest=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\1\',imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    
+    A=[G_E G_C G_I];
+    if max(A)==G_E
+        NDZ_Pool_E_Counter_e=NDZ_Pool_E_Counter_e+1;
+        NDZ_Pool_E_Array(i)=1;
+    end
+    if max(A)==G_C
+        NDZ_Pool_E_Counter_c=NDZ_Pool_E_Counter_c+1;
+        NDZ_Pool_E_Array(i)=2;
+        display(['Que 1(b).(iv) E Test Characters:Image File Number ' num2str(i+200) ' is E but detected as C']);
+    end
+    if max(A)==G_I
+        NDZ_Pool_E_Counter_i=NDZ_Pool_E_Counter_i+1;
+        NDZ_Pool_E_Array(i)=3;
+        display(['Que 1(b).(iii) E Test Characters:Image File Number ' num2str(i+200) ' is E but detected as I']);
+    end
+end
+display(' ');
+for i=1:numel(imageFiles)
+    imgTest=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\2\',imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    A=[G_E G_C G_I];
+    if max(A)==G_E
+        NDZ_Pool_C_Counter_e=NDZ_Pool_C_Counter_e+1;
+        NDZ_Pool_C_Array(i)=1;
+        display(['Que 1(b).(iv) C Test Characters:Image File Number ' num2str(i+200) ' is C but detected as E']);
+    end
+    if max(A)==G_C
+        NDZ_Pool_C_Counter_c=NDZ_Pool_C_Counter_c+1;
+        NDZ_Pool_C_Array(i)=2;
+    end
+    if max(A)==G_I
+        NDZ_Pool_C_Counter_i=NDZ_Pool_C_Counter_i+1;
+        NDZ_Pool_C_Array(i)=3;
+        display(['Que 1(b).(iv) C Test Characters:Image File Number ' num2str(i+200) ' is C but detected as I']);
+    end
+end
+for i=1:numel(imageFiles)
+    imgTest=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TestCharacters\3\',imageFiles(i).name));
+    imgTest=imresize(imgTest,0.25);
+    imgTest=imgTest(:);
+    G_E=-(1/2)*(double(imgTest)-double(imMean_E))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_E)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_C=-(1/2)*(double(imgTest)-double(imMean_C))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_C)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    G_I=-(1/2)*(double(imgTest)-double(imMean_I))'*(double(imCovariance_Pool_NDZ)\(double(imgTest)-double(imMean_I)))-((1/2)*double(log(detCovariance_Pool_NDZ)));
+    A=[G_E G_C G_I];
+    if max(A)==G_E
+        NDZ_Pool_I_Counter_e=NDZ_Pool_I_Counter_e+1;
+        NDZ_Pool_I_Array(i)=1;
+        display(['Que 1(b).(iv) I Test Characters:Image File Number ' num2str(i+200) ' is I but detected as E']);
+    end
+    if max(A)==G_C
+        NDZ_Pool_I_Counter_c=NDZ_Pool_I_Counter_c+1;
+        NDZ_Pool_I_Array(i)=2;
+        display(['Que 1(b).(iv) I Test Characters:Image File Number ' num2str(i+200) ' is I but detected as C']);
+    end
+    if max(A)==G_I
+        NDZ_Pool_I_Counter_i=NDZ_Pool_I_Counter_i+1;
+        NDZ_Pool_I_Array(i)=3;
+    end
+end
+display(' ');
+display(['Que 1(a).(iii) E Test Characters: ' num2str(NDZ_Pool_E_Counter_e) ' image files are detected as E']);
+display(['Que 1(a).(iii) E Test Characters: ' num2str(NDZ_Pool_E_Counter_c) ' image files are detected as C']);
+display(['Que 1(a).(iii) E Test Characters: ' num2str(NDZ_Pool_E_Counter_i) ' image files are detected as I']);
+display(' ');
+display(['Que 1(a).(iii) C Test Characters: ' num2str(NDZ_Pool_C_Counter_e) ' image files are detected as E']);
+display(['Que 1(a).(iii) C Test Characters: ' num2str(NDZ_Pool_C_Counter_c) ' image files are detected as C']);
+display(['Que 1(a).(iii) C Test Characters: ' num2str(NDZ_Pool_C_Counter_i) ' image files are detected as I']);
+display(' ');
+display(['Que 1(a).(iii) I Test Characters: ' num2str(NDZ_Pool_I_Counter_e) ' image files are detected as E']);
+display(['Que 1(a).(iii) I Test Characters: ' num2str(NDZ_Pool_I_Counter_c) ' image files are detected as C']);
+display(['Que 1(a).(iii) I Test Characters: ' num2str(NDZ_Pool_I_Counter_i) ' image files are detected as I']);
+display(' ');
+display(['Que 1(a).(iii) Accuracy of E test characters: ' num2str(NDZ_Pool_E_Counter_e) '%']);
+display(['Que 1(a).(iii) Accuracy of C test characters: ' num2str(NDZ_Pool_C_Counter_c) '%']);
+display(['Que 1(a).(iii) Accuracy of I test characters: ' num2str(NDZ_Pool_I_Counter_i) '%']);
+display(['Que 1(a).(iii) Average accuracy of all test characters: ' num2str((NDZ_Pool_E_Counter_e+NDZ_Pool_C_Counter_c+NDZ_Pool_I_Counter_i)/3) '%']);
+display(' ');
+##### SOURCE END #####
+--></body></html>

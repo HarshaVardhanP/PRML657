@@ -1,0 +1,449 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assign1CovAll</title><meta name="generator" content="MATLAB 7.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-02-12"><meta name="DC.source" content="Assign1CovAll.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%Author: P. Harsha Vardhan (11010281)</span>
+<span class="comment">%This file has Covariance Calculations of all parts of Question 1(a)</span>
+clc;
+clear <span class="string">all</span>;
+close <span class="string">all</span>;
+</pre><pre class="codeinput"><span class="comment">%Question 1(a).(i):Mean and Covariance Calculation</span>
+<span class="comment">%--------------------------Mean and Covariance of 'e' Train Characters----------------------------------%</span>
+dirName=<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1'</span>;
+imageFiles=dir(fullfile(dirName,<span class="string">'*.jpg'</span>));
+numel(imageFiles)
+<span class="comment">%-------------------------'e' Mean Finding----------------------------</span>
+img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\'</span>,imageFiles(1).name));
+imMean_E=imresize(img,0.25);
+ <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    imMean_E=imadd(double(imMean_E),double(img));
+ <span class="keyword">end</span>
+ imMean_E=imMean_E/200;
+ imshow(imMean_E);
+ imMean_E=imMean_E(:);
+ <span class="comment">%-----------------------'e' Covariance Finding--------------------------</span>
+ imCovariance_E=zeros(1024,1024);
+  <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_E=imsubtract(double(img),double(imMean_E));
+    imCovariance_E=imCovariance_E+(imgXU_E)*(imgXU_E');
+  <span class="keyword">end</span>
+imCovariance_E=imCovariance_E/200;
+imCovariance_E=imCovariance_E+0.37.*eye(1024,1024);      <span class="comment">%lambda=0.37</span>
+detCovariance_E=det(imCovariance_E)
+figure, imshow(imCovariance_E)
+
+<span class="comment">%--------------------------Mean and Covariance of 'c' Train Characters----------------------------------%</span>
+dirName=<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2'</span>;
+imageFiles=dir(fullfile(dirName,<span class="string">'*.jpg'</span>));
+numel(imageFiles)
+<span class="comment">%-------------------------'c' Mean Finding----------------------------</span>
+img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\'</span>,imageFiles(1).name));
+imMean_C=imresize(img,0.25);
+ <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    imMean_C=imadd(double(imMean_C),double(img));
+ <span class="keyword">end</span>
+ imMean_C=imMean_C/200;
+ figure, imshow(imMean_C);
+ imMean_C=imMean_C(:);
+ <span class="comment">%-----------------------'c' Covariance Finding--------------------------</span>
+ imCovariance_C=zeros(1024,1024);
+  <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_C=imsubtract(double(img),double(imMean_C));
+    imCovariance_C=imCovariance_C+(imgXU_C)*(imgXU_C');
+  <span class="keyword">end</span>
+imCovariance_C=imCovariance_C/200;
+imCovariance_C=imCovariance_C+0.37*eye(1024,1024);    <span class="comment">%lambda=0.37</span>
+detCovariance_C=det(imCovariance_C)
+figure, imshow(imCovariance_C)
+
+<span class="comment">%--------------------------Mean and Covariance of 'i' Train Characters----------------------------------%</span>
+dirName=<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3'</span>;
+imageFiles=dir(fullfile(dirName,<span class="string">'*.jpg'</span>));
+numel(imageFiles)
+<span class="comment">%-------------------------'i' Mean Finding----------------------------</span>
+img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\'</span>,imageFiles(1).name));
+imMean_I=imresize(img,0.25);
+ <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    imMean_I=imadd(double(imMean_I),double(img));
+ <span class="keyword">end</span>
+ imMean_I=imMean_I/200;
+ figure, imshow(imMean_I);
+ imMean_I=imMean_I(:);
+ <span class="comment">%-----------------------'i' Covariance Finding--------------------------</span>
+ imCovariance_I=zeros(1024,1024);
+  <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_I=imsubtract(double(img),double(imMean_I));
+    imCovariance_I=imCovariance_I+(imgXU_I)*(imgXU_I');
+  <span class="keyword">end</span>
+imCovariance_I=imCovariance_I/200;
+imCovariance_I=imCovariance_I+0.5*eye(1024,1024); <span class="comment">%lambda=0.5</span>
+detCovariance_I=det(imCovariance_I)
+figure, imshow(imCovariance_I)
+</pre><pre class="codeoutput">
+ans =
+
+   200
+
+
+detCovariance_E =
+
+  2.2379e-013
+
+Warning: Image is too big to fit on screen; displaying at 50% 
+
+ans =
+
+   200
+
+
+detCovariance_C =
+
+  1.9778e-009
+
+Warning: Image is too big to fit on screen; displaying at 50% 
+
+ans =
+
+   200
+
+
+detCovariance_I =
+
+  3.0269e-008
+
+Warning: Image is too big to fit on screen; displaying at 50% 
+</pre><img vspace="5" hspace="5" src="Assign1CovAll_01.png" alt=""> <img vspace="5" hspace="5" src="Assign1CovAll_02.png" alt=""> <img vspace="5" hspace="5" src="Assign1CovAll_03.png" alt=""> <img vspace="5" hspace="5" src="Assign1CovAll_04.png" alt=""> <img vspace="5" hspace="5" src="Assign1CovAll_05.png" alt=""> <img vspace="5" hspace="5" src="Assign1CovAll_06.png" alt=""> <pre class="codeinput"> <span class="comment">%Question 1(a).(ii) :Covariance Calculation</span>
+ <span class="comment">%--------------------Pooled Covariance without zeroing non-diagonal elements</span>
+
+imMean_Pool=(imMean_E+imMean_C+imMean_I)/3;
+
+imCovariance_Pool=zeros(1024,1024);
+  <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_Pool=imsubtract(double(img),double(imMean_Pool));
+    imCovariance_Pool=imCovariance_Pool+(imgXU_Pool)*(imgXU_Pool');
+  <span class="keyword">end</span>
+
+    <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_Pool=imsubtract(double(img),double(imMean_Pool));
+    imCovariance_Pool=imCovariance_Pool+(imgXU_Pool)*(imgXU_Pool');
+    <span class="keyword">end</span>
+
+    <span class="keyword">for</span> i=1:numel(imageFiles)
+    img=imread(strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\'</span>,imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_Pool=imsubtract(double(img),double(imMean_Pool));
+    imCovariance_Pool=imCovariance_Pool+(imgXU_Pool)*(imgXU_Pool');
+    <span class="keyword">end</span>
+
+    imCovariance_Pool=imCovariance_Pool/600;
+    imCovariance_Pool=imCovariance_Pool+0.25*eye(1024,1024);
+    detCovariance_Pool=det(imCovariance_Pool)
+    figure, imshow(imCovariance_Pool)
+</pre><pre class="codeoutput">
+detCovariance_Pool =
+
+  504.1085
+
+Warning: Image is too big to fit on screen; displaying at 50% 
+</pre><img vspace="5" hspace="5" src="Assign1CovAll_07.png" alt=""> <pre class="codeinput"><span class="comment">%Question 1(a).(iii):Covariance Calculation</span>
+<span class="comment">%-----------Individual Covariances with Non Diagonal Elements to be Zero----------</span>
+
+ imCovariance_E_NDZ=(eye(1024,1024)).*imCovariance_E;
+ imCovariance_C_NDZ=(eye(1024,1024)).*imCovariance_C;
+ imCovariance_I_NDZ=(eye(1024,1024)).*imCovariance_I;
+
+imCovariance_E_NDZ=imCovariance_E_NDZ-0.21*eye(1024,1024); <span class="comment">%lambda=0.21</span>
+imCovariance_C_NDZ=imCovariance_C_NDZ-0.225*eye(1024,1024); <span class="comment">%lambda=0.225</span>
+imCovariance_I_NDZ=imCovariance_I_NDZ-0.19*eye(1024,1024); <span class="comment">%lambda=0.19</span>
+detCovariance_E_NDZ=det(imCovariance_E_NDZ)
+detCovariance_C_NDZ=det(imCovariance_C_NDZ)
+detCovariance_I_NDZ=det(imCovariance_I_NDZ)
+figure, imshow(imCovariance_E_NDZ);
+figure, imshow(imCovariance_C_NDZ);
+figure, imshow(imCovariance_I_NDZ);
+</pre><pre class="codeoutput">
+detCovariance_E_NDZ =
+
+  4.2687e-009
+
+
+detCovariance_C_NDZ =
+
+  2.8655e-004
+
+
+detCovariance_I_NDZ =
+
+  1.8523e-008
+
+Warning: Image is too big to fit on screen; displaying at 50% 
+Warning: Image is too big to fit on screen; displaying at 50% 
+Warning: Image is too big to fit on screen; displaying at 50% 
+</pre><img vspace="5" hspace="5" src="Assign1CovAll_08.png" alt=""> <img vspace="5" hspace="5" src="Assign1CovAll_09.png" alt=""> <img vspace="5" hspace="5" src="Assign1CovAll_10.png" alt=""> <pre class="codeinput"> <span class="comment">%Question 1(a).(iv) :Covariance Calculation</span>
+ <span class="comment">%------------Pooled covariance after zeroing non-zero diagonal elements</span>
+
+ imCovariance_Pool_NDZ=(eye(1024,1024)).*imCovariance_Pool;
+ imCovariance_Pool_NDZ=imCovariance_Pool_NDZ-0.14*eye(1024,1024);
+ detCovariance_Pool_NDZ=det(imCovariance_Pool_NDZ)
+ figure, imshow(imCovariance_Pool_NDZ)
+</pre><pre class="codeoutput">
+detCovariance_Pool_NDZ =
+
+  3.2193e-006
+
+Warning: Image is too big to fit on screen; displaying at 50% 
+</pre><img vspace="5" hspace="5" src="Assign1CovAll_11.png" alt=""> <pre class="codeinput"> <span class="comment">%Question 1(a).(v):Covariance Calculation</span>
+ <span class="comment">%-------------------Spherical Covariance--------------%</span>
+ <span class="comment">%----------here, Covarince is assumed to be Identity Matrix-------%</span>
+ figure, imshow(eye(1024,1024));
+</pre><pre class="codeoutput">Warning: Image is too big to fit on screen; displaying at 50% 
+</pre><img vspace="5" hspace="5" src="Assign1CovAll_12.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.12<br></p></div><!--
+##### SOURCE BEGIN #####
+%Author: P. Harsha Vardhan (11010281)
+%This file has Covariance Calculations of all parts of Question 1(a)
+clc;
+clear all;
+close all;
+%%
+%Question 1(a).(i):Mean and Covariance Calculation
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHMean and Covariance of 'e' Train CharactersREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+dirName='D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1';
+imageFiles=dir(fullfile(dirName,'*.jpg'));
+numel(imageFiles)
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-'e' Mean FindingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\',imageFiles(1).name));
+imMean_E=imresize(img,0.25);
+ for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    imMean_E=imadd(double(imMean_E),double(img));
+ end
+ imMean_E=imMean_E/200; 
+ imshow(imMean_E);
+ imMean_E=imMean_E(:); 
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-'e' Covariance FindingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+ imCovariance_E=zeros(1024,1024);
+  for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_E=imsubtract(double(img),double(imMean_E));
+    imCovariance_E=imCovariance_E+(imgXU_E)*(imgXU_E');    
+  end
+imCovariance_E=imCovariance_E/200;
+imCovariance_E=imCovariance_E+0.37.*eye(1024,1024);      %lambda=0.37
+detCovariance_E=det(imCovariance_E)
+figure, imshow(imCovariance_E)
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHMean and Covariance of 'c' Train CharactersREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+dirName='D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2';
+imageFiles=dir(fullfile(dirName,'*.jpg'));
+numel(imageFiles)
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-'c' Mean FindingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\',imageFiles(1).name));
+imMean_C=imresize(img,0.25);
+ for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    imMean_C=imadd(double(imMean_C),double(img));
+ end
+ imMean_C=imMean_C/200; 
+ figure, imshow(imMean_C);
+ imMean_C=imMean_C(:); 
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-'c' Covariance FindingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+ imCovariance_C=zeros(1024,1024);
+  for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_C=imsubtract(double(img),double(imMean_C));
+    imCovariance_C=imCovariance_C+(imgXU_C)*(imgXU_C');    
+  end
+imCovariance_C=imCovariance_C/200;
+imCovariance_C=imCovariance_C+0.37*eye(1024,1024);    %lambda=0.37
+detCovariance_C=det(imCovariance_C)
+figure, imshow(imCovariance_C)
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHMean and Covariance of 'i' Train CharactersREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+dirName='D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3';
+imageFiles=dir(fullfile(dirName,'*.jpg'));
+numel(imageFiles)
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-'i' Mean FindingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\',imageFiles(1).name));
+imMean_I=imresize(img,0.25);
+ for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    imMean_I=imadd(double(imMean_I),double(img));
+ end
+ imMean_I=imMean_I/200; 
+ figure, imshow(imMean_I);
+ imMean_I=imMean_I(:); 
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-'i' Covariance FindingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+ imCovariance_I=zeros(1024,1024);
+  for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_I=imsubtract(double(img),double(imMean_I));
+    imCovariance_I=imCovariance_I+(imgXU_I)*(imgXU_I');    
+  end
+imCovariance_I=imCovariance_I/200;
+imCovariance_I=imCovariance_I+0.5*eye(1024,1024); %lambda=0.5
+detCovariance_I=det(imCovariance_I)
+figure, imshow(imCovariance_I)
+
+
+ %%
+ %Question 1(a).(ii) :Covariance Calculation
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHPooled Covariance without zeroing non-diagonal elements
+
+imMean_Pool=(imMean_E+imMean_C+imMean_I)/3;
+
+imCovariance_Pool=zeros(1024,1024);
+  for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\1\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_Pool=imsubtract(double(img),double(imMean_Pool));
+    imCovariance_Pool=imCovariance_Pool+(imgXU_Pool)*(imgXU_Pool');    
+  end
+  
+    for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\2\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_Pool=imsubtract(double(img),double(imMean_Pool));
+    imCovariance_Pool=imCovariance_Pool+(imgXU_Pool)*(imgXU_Pool');    
+    end
+
+    for i=1:numel(imageFiles)
+    img=imread(strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass1\TrainCharacters\3\',imageFiles(i).name));
+    img=imresize(img,0.25);
+    img=img(:);
+    imgXU_Pool=imsubtract(double(img),double(imMean_Pool));
+    imCovariance_Pool=imCovariance_Pool+(imgXU_Pool)*(imgXU_Pool');    
+    end
+    
+    imCovariance_Pool=imCovariance_Pool/600;
+    imCovariance_Pool=imCovariance_Pool+0.25*eye(1024,1024);
+    detCovariance_Pool=det(imCovariance_Pool)
+    figure, imshow(imCovariance_Pool)
+    
+%%
+%Question 1(a).(iii):Covariance Calculation
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Individual Covariances with Non Diagonal Elements to be ZeroREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+ 
+ imCovariance_E_NDZ=(eye(1024,1024)).*imCovariance_E;
+ imCovariance_C_NDZ=(eye(1024,1024)).*imCovariance_C;
+ imCovariance_I_NDZ=(eye(1024,1024)).*imCovariance_I;
+
+imCovariance_E_NDZ=imCovariance_E_NDZ-0.21*eye(1024,1024); %lambda=0.21
+imCovariance_C_NDZ=imCovariance_C_NDZ-0.225*eye(1024,1024); %lambda=0.225
+imCovariance_I_NDZ=imCovariance_I_NDZ-0.19*eye(1024,1024); %lambda=0.19
+detCovariance_E_NDZ=det(imCovariance_E_NDZ)
+detCovariance_C_NDZ=det(imCovariance_C_NDZ)
+detCovariance_I_NDZ=det(imCovariance_I_NDZ)
+figure, imshow(imCovariance_E_NDZ);
+figure, imshow(imCovariance_C_NDZ);
+figure, imshow(imCovariance_I_NDZ);
+
+ %%
+ %Question 1(a).(iv) :Covariance Calculation
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHPooled covariance after zeroing non-zero diagonal elements
+
+ imCovariance_Pool_NDZ=(eye(1024,1024)).*imCovariance_Pool;
+ imCovariance_Pool_NDZ=imCovariance_Pool_NDZ-0.14*eye(1024,1024);
+ detCovariance_Pool_NDZ=det(imCovariance_Pool_NDZ)
+ figure, imshow(imCovariance_Pool_NDZ)
+ 
+ %%
+ %Question 1(a).(v):Covariance Calculation
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Spherical CovarianceREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHhere, Covarince is assumed to be Identity MatrixREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-%
+ figure, imshow(eye(1024,1024));
+##### SOURCE END #####
+--></body></html>

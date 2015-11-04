@@ -1,0 +1,229 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment5task1</title><meta name="generator" content="MATLAB 7.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-04-27"><meta name="DC.source" content="Assignment5task1.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%EE 657; PRML Course ; Assignment 5</span>
+<span class="comment">%This file has code for task 1 of Assignment 5</span>
+clc;
+clear <span class="string">all</span>;
+close <span class="string">all</span>;
+</pre><pre class="codeinput">load(<span class="string">'Pattern1.mat'</span>);
+load(<span class="string">'Pattern2.mat'</span>);
+load(<span class="string">'Pattern3.mat'</span>);
+load(<span class="string">'Test1.mat'</span>);
+load(<span class="string">'Test2.mat'</span>);
+load(<span class="string">'Test3.mat'</span>);
+<span class="keyword">for</span> i=1:200
+    train_pattern_1{:,i} = train_pattern_1{:,i}';
+    train_pattern_2{:,i} = train_pattern_2{:,i}';
+    train_pattern_3{:,i} = train_pattern_3{:,i}';
+<span class="keyword">end</span>
+<span class="keyword">for</span> i=1:100
+    test_pattern_1{:,i} = test_pattern_1{:,i}';
+    test_pattern_2{:,i} = test_pattern_2{:,i}';
+    test_pattern_3{:,i} = test_pattern_3{:,i}';
+<span class="keyword">end</span>
+Pattern1=cell2mat(train_pattern_1)';
+Pattern2=cell2mat(train_pattern_2)';
+Pattern3=cell2mat(train_pattern_3)';
+Test1=cell2mat(test_pattern_1)';
+Test2=cell2mat(test_pattern_2)';
+Test3=cell2mat(test_pattern_3)';
+
+<span class="comment">%%--------------------------------part A-----------------------</span>
+Y=[ones(200,1) Pattern1; -ones(200,1) -Pattern2];
+a=zeros(121,1);
+<span class="keyword">for</span> i=1:1000000
+   b=Y*a;
+   m=find(b&lt;=0);
+   <span class="keyword">if</span>(length(m)==0)
+       display([<span class="string">'Number of iterations'</span>])
+       i
+    <span class="keyword">break</span>;
+<span class="keyword">end</span>
+a=a+sum(Y(m,:))';
+<span class="keyword">end</span>
+Y_test=[ones(100,1) Test1; -ones(100,1) -Test2];
+m_test=Y_test*a;
+accuracy=length(find(m_test&gt;=0))/2
+display(<span class="string">'[Performance of classifier Test1 and Test2 is ]'</span>)
+accuracy
+
+<span class="comment">%%--------------------------------part B-----------------------</span>
+Y=[ones(200,1) Pattern1; -ones(200,1) -Pattern3];
+a=zeros(121,1);
+<span class="keyword">for</span> i=1:1000000
+   b=Y*a;
+   m=find(b&lt;=0);
+   <span class="keyword">if</span>(length(m)==0)
+       display([<span class="string">'Number of iterations'</span>])
+       i
+    <span class="keyword">break</span>;
+<span class="keyword">end</span>
+a=a+sum(Y(m,:))';
+<span class="keyword">end</span>
+Y_test=[ones(100,1) Test1; -ones(100,1) -Test3];
+m_test=Y_test*a;
+accuracy=length(find(m_test&gt;=0))/2;
+display(<span class="string">'[Performance of classifier Test1 and Test3 is ]'</span>)
+accuracy
+</pre><pre class="codeoutput">Number of iterations
+
+i =
+
+      795024
+
+
+accuracy =
+
+    87
+
+[Performance of classifier Test1 and Test2 is ]
+
+accuracy =
+
+    87
+
+Number of iterations
+
+i =
+
+     3
+
+[Performance of classifier Test1 and Test3 is ]
+
+accuracy =
+
+   100
+
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.12<br></p></div><!--
+##### SOURCE BEGIN #####
+%EE 657; PRML Course ; Assignment 5
+%This file has code for task 1 of Assignment 5
+clc;
+clear all;
+close all;
+%%
+load('Pattern1.mat');
+load('Pattern2.mat');
+load('Pattern3.mat');
+load('Test1.mat');
+load('Test2.mat');
+load('Test3.mat');
+for i=1:200
+    train_pattern_1{:,i} = train_pattern_1{:,i}';
+    train_pattern_2{:,i} = train_pattern_2{:,i}';
+    train_pattern_3{:,i} = train_pattern_3{:,i}';
+end
+for i=1:100
+    test_pattern_1{:,i} = test_pattern_1{:,i}';
+    test_pattern_2{:,i} = test_pattern_2{:,i}';
+    test_pattern_3{:,i} = test_pattern_3{:,i}';
+end
+Pattern1=cell2mat(train_pattern_1)';
+Pattern2=cell2mat(train_pattern_2)';
+Pattern3=cell2mat(train_pattern_3)';
+Test1=cell2mat(test_pattern_1)';
+Test2=cell2mat(test_pattern_2)';
+Test3=cell2mat(test_pattern_3)';
+
+%%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHpart AREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+Y=[ones(200,1) Pattern1; -ones(200,1) -Pattern2];
+a=zeros(121,1);
+for i=1:1000000
+   b=Y*a;
+   m=find(b<=0);
+   if(length(m)==0)
+       display(['Number of iterations'])
+       i
+    break;
+end
+a=a+sum(Y(m,:))';    
+end
+Y_test=[ones(100,1) Test1; -ones(100,1) -Test2];
+m_test=Y_test*a;
+accuracy=length(find(m_test>=0))/2
+display('[Performance of classifier Test1 and Test2 is ]')
+accuracy
+
+%%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHpart BREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+Y=[ones(200,1) Pattern1; -ones(200,1) -Pattern3];
+a=zeros(121,1);
+for i=1:1000000
+   b=Y*a;
+   m=find(b<=0);
+   if(length(m)==0)
+       display(['Number of iterations'])
+       i
+    break;
+end
+a=a+sum(Y(m,:))';    
+end
+Y_test=[ones(100,1) Test1; -ones(100,1) -Test3];
+m_test=Y_test*a;
+accuracy=length(find(m_test>=0))/2;
+display('[Performance of classifier Test1 and Test3 is ]')
+accuracy
+##### SOURCE END #####
+--></body></html>

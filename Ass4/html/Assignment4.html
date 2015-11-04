@@ -1,0 +1,396 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment4</title><meta name="generator" content="MATLAB 7.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-04-15"><meta name="DC.source" content="Assignment4.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%Author: P. Harsha Vardhan (11010281)</span>
+<span class="comment">%EE 657; PRML Course ; Assignment 4</span>
+<span class="comment">%This file has code for task 1 of Assignment 4</span>
+clc;
+clear <span class="string">all</span>;
+close <span class="string">all</span>;
+</pre><pre class="codeinput"><span class="comment">%TASK 1</span>
+<span class="comment">%--------------------------TASK 1 : ----------------------------------%</span>
+dirName=strcat(<span class="string">'D:\matlab2011a1\matlab2011a\bin\PRML657\Ass4'</span>);
+img=imread(strcat(dirName,<span class="string">'\'</span>,<span class="string">'ski_image.jpg'</span>));
+img=double(img)/255;
+img=imresize(img, [200 200]);
+imshow(img);
+mean=[0.47, 0.05, 0.7; 0.47, 0.05, 0.7; 0.47, 0.05, 0.7;];
+covariance=zeros(3,3,3);
+covariance(:,:,1)=eye(3);covariance(:,:,2)=eye(3);covariance(:,:,3)=eye(3);
+wt=zeros(3,1);
+wt(1)=1/3;wt(2)=1/3;wt(3)=1/3;
+s=size(img);
+X=cell(1,3);
+X{1}=img(:,:,1);
+X{2}=img(:,:,2);
+X{3}=img(:,:,3);
+x=zeros((s(1)*s(2)),3);
+x(:,1)=X{1}(:);
+x(:,2)=X{2}(:);
+x(:,3)=X{3}(:);
+
+
+
+<span class="keyword">for</span> n=1:30
+    GaussianR = mvnpdf(x,mean(:,1)',covariance(:,:,1));
+    GaussianG = mvnpdf(x,mean(:,2)',covariance(:,:,2));
+    GaussianB = mvnpdf(x,mean(:,3)',covariance(:,:,3));
+
+    LogLikelihood(n)=0;
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+        sum=zeros(1,3);
+        sum(1,1)=sum(1,1)+wt(1)*GaussianR(i);
+        sum(1,2)=sum(1,2)+wt(2)*GaussianG(i);
+        sum(1,3)=sum(1,3)+wt(3)*GaussianB(i);
+        LogLikelihood(n)=LogLikelihood(n)+log(sum(1,1)+sum(1,2)+sum(1,3));
+    <span class="keyword">end</span>
+
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+    GammaR(i)=(wt(1)*GaussianR(i))/(wt(1)*GaussianR(i)+wt(2)*GaussianG(i)+wt(3)*GaussianB(i));
+    GammaG(i)=(wt(2)*GaussianG(i))/(wt(1)*GaussianR(i)+wt(2)*GaussianG(i)+wt(3)*GaussianB(i));
+    GammaB(i)=(wt(3)*GaussianB(i))/(wt(1)*GaussianR(i)+wt(2)*GaussianG(i)+wt(3)*GaussianB(i));
+    <span class="keyword">end</span>
+    GammaR_prod=0;
+    GammaR_sum=0;
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+        GammaR_prod=GammaR_prod+GammaR(i)*x(i,:);
+        GammaR_sum=GammaR_sum+GammaR(i);
+    <span class="keyword">end</span>
+    mean(:,1)=GammaR_prod/GammaR_sum;
+    GammaR_prod=0;
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+        GammaR_prod=GammaR_prod+GammaR(i)*(x(i,:)-mean(:,1)')'*(x(i,:)-mean(:,1)');
+    <span class="keyword">end</span>
+    covariance(:,:,1)=GammaR_prod/GammaR_sum;
+    wt(1)=GammaR_sum/(s(1)*s(2));
+
+    GammaG_prod=0;
+    GammaG_sum=0;
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+        GammaG_prod=GammaG_prod+GammaG(i)*x(i,:);
+        GammaG_sum=GammaG_sum+GammaG(i);
+    <span class="keyword">end</span>
+    mean(:,2)=GammaG_prod/GammaG_sum;
+    GammaG_prod=0;
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+        GammaG_prod=GammaG_prod+GammaG(i)*(x(i,:)-mean(:,2)')'*(x(i,:)-mean(:,2)');
+    <span class="keyword">end</span>
+    covariance(:,:,2)=GammaG_prod/GammaG_sum;
+    wt(2)=GammaG_sum/(s(1)*s(2));
+
+
+    GammaB_prod=0;
+    GammaB_sum=0;
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+        GammaB_prod=GammaB_prod+GammaB(i)*x(i,:);
+        GammaB_sum=GammaB_sum+GammaB(i);
+    <span class="keyword">end</span>
+    mean(:,3)=GammaB_prod/GammaB_sum;
+    GammaB_prod=0;
+    <span class="keyword">for</span> i=1:(s(1)*s(2))
+        GammaB_prod=GammaB_prod+GammaB(i)*(x(i,:)-mean(:,3)')'*(x(i,:)-mean(:,3)');
+    <span class="keyword">end</span>
+    covariance(:,:,3)=GammaB_prod/GammaB_sum;
+    wt(3)=GammaB_sum/(s(1)*s(2));
+
+<span class="keyword">end</span>
+<span class="keyword">for</span> i=1:s(1)
+    <span class="keyword">for</span> j=1:s(2)
+        [C I]=max([GammaR((j-1)*200+i) GammaG((j-1)*200+i) GammaB((j-1)*200+i)]);
+        <span class="keyword">if</span> I==1
+            Output(i,j,:)=mean(:,1);
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> I==2
+            Output(i,j,:)=mean(:,2);
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> I==3
+            Output(i,j,:)=mean(:,3);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+display([<span class="string">'Segemented Image'</span>])
+figure
+imagesc(Output);
+
+display([<span class="string">'Log Likelihood function convergence graph'</span>])
+figure
+plot(LogLikelihood);
+
+display([<span class="string">'Final Values of Means are'</span>])
+mean(:,1)
+mean(:,2)
+mean(:,3)
+
+display([<span class="string">'Final Values of Covariances are'</span>])
+covariance(:,:,1)
+covariance(:,:,2)
+covariance(:,:,3)
+
+display([<span class="string">'Final values of weights are'</span>])
+wt(1)
+wt(2)
+wt(3)
+</pre><pre class="codeoutput">Segemented Image
+Log Likelihood function convergence graph
+Final Values of Means are
+
+ans =
+
+    0.5584
+    0.6443
+    0.7434
+
+
+ans =
+
+    0.4991
+    0.5329
+    0.5705
+
+
+ans =
+
+    0.7110
+    0.8005
+    0.8527
+
+Final Values of Covariances are
+
+ans =
+
+    0.0247    0.0216    0.0102
+    0.0216    0.0191    0.0094
+    0.0102    0.0094    0.0060
+
+
+ans =
+
+    0.0999    0.0974    0.0895
+    0.0974    0.0981    0.0914
+    0.0895    0.0914    0.0878
+
+
+ans =
+
+    0.0119    0.0088    0.0039
+    0.0088    0.0065    0.0030
+    0.0039    0.0030    0.0015
+
+Final values of weights are
+
+ans =
+
+    0.4084
+
+
+ans =
+
+    0.0926
+
+
+ans =
+
+    0.4990
+
+</pre><img vspace="5" hspace="5" src="Assignment4_01.png" alt=""> <img vspace="5" hspace="5" src="Assignment4_02.png" alt=""> <img vspace="5" hspace="5" src="Assignment4_03.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.12<br></p></div><!--
+##### SOURCE BEGIN #####
+%Author: P. Harsha Vardhan (11010281)
+%EE 657; PRML Course ; Assignment 4
+%This file has code for task 1 of Assignment 4
+clc;
+clear all;
+close all;
+%%
+%TASK 1
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHTASK 1 : REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+dirName=strcat('D:\matlab2011a1\matlab2011a\bin\PRML657\Ass4');
+img=imread(strcat(dirName,'\','ski_image.jpg'));
+img=double(img)/255;
+img=imresize(img, [200 200]);
+imshow(img);
+mean=[0.47, 0.05, 0.7; 0.47, 0.05, 0.7; 0.47, 0.05, 0.7;];
+covariance=zeros(3,3,3);
+covariance(:,:,1)=eye(3);covariance(:,:,2)=eye(3);covariance(:,:,3)=eye(3);
+wt=zeros(3,1);
+wt(1)=1/3;wt(2)=1/3;wt(3)=1/3;
+s=size(img);
+X=cell(1,3);
+X{1}=img(:,:,1);
+X{2}=img(:,:,2);
+X{3}=img(:,:,3);
+x=zeros((s(1)*s(2)),3);
+x(:,1)=X{1}(:);
+x(:,2)=X{2}(:);
+x(:,3)=X{3}(:);
+
+
+
+for n=1:30
+    GaussianR = mvnpdf(x,mean(:,1)',covariance(:,:,1));
+    GaussianG = mvnpdf(x,mean(:,2)',covariance(:,:,2));
+    GaussianB = mvnpdf(x,mean(:,3)',covariance(:,:,3));
+    
+    LogLikelihood(n)=0;
+    for i=1:(s(1)*s(2))
+        sum=zeros(1,3);
+        sum(1,1)=sum(1,1)+wt(1)*GaussianR(i); 
+        sum(1,2)=sum(1,2)+wt(2)*GaussianG(i);
+        sum(1,3)=sum(1,3)+wt(3)*GaussianB(i); 
+        LogLikelihood(n)=LogLikelihood(n)+log(sum(1,1)+sum(1,2)+sum(1,3));
+    end
+        
+    for i=1:(s(1)*s(2))
+    GammaR(i)=(wt(1)*GaussianR(i))/(wt(1)*GaussianR(i)+wt(2)*GaussianG(i)+wt(3)*GaussianB(i));
+    GammaG(i)=(wt(2)*GaussianG(i))/(wt(1)*GaussianR(i)+wt(2)*GaussianG(i)+wt(3)*GaussianB(i));
+    GammaB(i)=(wt(3)*GaussianB(i))/(wt(1)*GaussianR(i)+wt(2)*GaussianG(i)+wt(3)*GaussianB(i));
+    end
+    GammaR_prod=0;
+    GammaR_sum=0;
+    for i=1:(s(1)*s(2))
+        GammaR_prod=GammaR_prod+GammaR(i)*x(i,:);
+        GammaR_sum=GammaR_sum+GammaR(i);    
+    end
+    mean(:,1)=GammaR_prod/GammaR_sum;
+    GammaR_prod=0;
+    for i=1:(s(1)*s(2))
+        GammaR_prod=GammaR_prod+GammaR(i)*(x(i,:)-mean(:,1)')'*(x(i,:)-mean(:,1)');
+    end
+    covariance(:,:,1)=GammaR_prod/GammaR_sum;
+    wt(1)=GammaR_sum/(s(1)*s(2));
+
+    GammaG_prod=0;
+    GammaG_sum=0;
+    for i=1:(s(1)*s(2))
+        GammaG_prod=GammaG_prod+GammaG(i)*x(i,:);
+        GammaG_sum=GammaG_sum+GammaG(i);    
+    end
+    mean(:,2)=GammaG_prod/GammaG_sum;
+    GammaG_prod=0;
+    for i=1:(s(1)*s(2))
+        GammaG_prod=GammaG_prod+GammaG(i)*(x(i,:)-mean(:,2)')'*(x(i,:)-mean(:,2)');
+    end
+    covariance(:,:,2)=GammaG_prod/GammaG_sum;
+    wt(2)=GammaG_sum/(s(1)*s(2));
+
+
+    GammaB_prod=0;
+    GammaB_sum=0;
+    for i=1:(s(1)*s(2))
+        GammaB_prod=GammaB_prod+GammaB(i)*x(i,:);
+        GammaB_sum=GammaB_sum+GammaB(i);    
+    end
+    mean(:,3)=GammaB_prod/GammaB_sum;
+    GammaB_prod=0;
+    for i=1:(s(1)*s(2))
+        GammaB_prod=GammaB_prod+GammaB(i)*(x(i,:)-mean(:,3)')'*(x(i,:)-mean(:,3)');
+    end
+    covariance(:,:,3)=GammaB_prod/GammaB_sum;
+    wt(3)=GammaB_sum/(s(1)*s(2));
+
+end
+for i=1:s(1)
+    for j=1:s(2)
+        [C I]=max([GammaR((j-1)*200+i) GammaG((j-1)*200+i) GammaB((j-1)*200+i)]);
+        if I==1
+            Output(i,j,:)=mean(:,1);
+        end
+        if I==2
+            Output(i,j,:)=mean(:,2);
+        end
+        if I==3
+            Output(i,j,:)=mean(:,3);
+        end
+    end
+end
+
+display(['Segemented Image'])
+figure
+imagesc(Output);
+
+display(['Log Likelihood function convergence graph'])
+figure
+plot(LogLikelihood);
+
+display(['Final Values of Means are'])
+mean(:,1)
+mean(:,2)
+mean(:,3)
+
+display(['Final Values of Covariances are'])
+covariance(:,:,1)
+covariance(:,:,2)
+covariance(:,:,3)
+
+display(['Final values of weights are'])
+wt(1)
+wt(2)
+wt(3)
+
+
+
+
+##### SOURCE END #####
+--></body></html>
